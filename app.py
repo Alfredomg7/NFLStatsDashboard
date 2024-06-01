@@ -34,6 +34,8 @@ team_yearly_stats = df.groupby(['team', 'season']).sum().reset_index()
 
 # Create HTML Components
 app.layout = html.Div([
+    # Dashboard section
+    html.Div([
     html.H1(f'NFL Offense Stats {min_year}-{max_year}', className='text-center pb-3'),
     html.Div([
         html.Div([
@@ -122,8 +124,19 @@ app.layout = html.Div([
                 ], className='row w-100')
             ], className='p-3')
         ], className='col-12 col-xl-6 p-3'),
-    ], className='row')
-], className='container-fluid')
+    ], className='row'),
+], className='container-fluid'),
+    # Footer section
+    html.Footer([
+        html.Div([
+            html.A('Author: Alfredo M.', href='https://github.com/Alfredomg7'),
+            html.Span(' | '),
+            html.A('Dataset Source', href='https://www.kaggle.com/datasets/philiphyde1/nfl-stats-1999-2022/code')
+        ], className='bg-light text-dark text-center py-3 fs-5')
+    ])
+])
+
+
 
 # Player stats by position line charts callback
 create_player_callback(app, 'RB', df_rb)
