@@ -9,6 +9,8 @@ This project is a Dash application that visualizes NFL offense statistics. It in
 - **Player Stats by Position**: View statistics for Running Backs, Wide Receivers, Tight Ends, and Quarterbacks.
 - **Player Selection**: Filter and visualize statistics for any player.
 - **Team Stats by Year**: Analyze team performance metrics over different seasons.
+- **Offense Stats Distribution Histogram**: Visualize the distribution of various offensive stats with a customizable histogram.
+- **Compare Offensive Stats Scatter Plot**: Compare two different offensive stats across teams with a dynamic scatter plot.
 - **Interactive Visualizations**: Use dropdowns and tabs to customize the data displayed in charts.
 
 ## Installation
