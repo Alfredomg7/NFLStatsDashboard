@@ -40,38 +40,43 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             html.H2('Offense Players Stats by Position', className='text-center pb-3'),
-            dcc.Tabs(id='position-tabs', value='RB', className='nav nav-pills', children=[
-                dcc.Tab(
-                    label='Running Backs',
-                    value='RB',
-                    className='nav-item',
-                    children=create_tab_content('RB', rb_stats, top_rb, df_rb)
-                ),
-                dcc.Tab(
-                    label='Wide Receivers',
-                    value='WR',
-                    className='nav-item',
-                    children=create_tab_content('WR', wr_te_stats, top_wr, df_wr)
-                ),
-                dcc.Tab(
-                    label='Tight Ends',
-                    value='TE',
-                    className='nav-item',
-                    children=create_tab_content('TE', wr_te_stats, top_te, df_te)
-                ),
-                dcc.Tab(
-                    label='Quarterbacks',
-                    value='QB',
-                    className='nav-item',
-                    children=create_tab_content('QB', qb_stats, top_qb, df_qb)
-                )
+            dbc.Tabs(
+                id='position-tabs',
+                active_tab='RB',
+                class_name='d-flex justify-content-center w-100',
+                children=[
+                    dbc.Tab(
+                        label='Running Backs',
+                        tab_id='RB',
+                        children=create_tab_content('RB', rb_stats, top_rb, df_rb)
+                    ),
+                    dbc.Tab(
+                        label='Wide Receivers',
+                        tab_id='WR',
+                        children=create_tab_content('WR', wr_te_stats, top_wr, df_wr)
+                    ),
+                    dbc.Tab(
+                        label='Tight Ends',
+                        tab_id='TE',
+                        children=create_tab_content('TE', wr_te_stats, top_te, df_te)
+                    ),
+                    dbc.Tab(
+                        label='Quarterbacks',
+                        tab_id='QB',
+                        children=create_tab_content('QB', qb_stats, top_qb, df_qb)
+                    )
             ])
         ], className='col-12 col-xl-6 px-5'),
         html.Div([
             html.H2('Team Stats by Season', className='text-center pb-3'),
-            dcc.Tabs(id='bar-chart-year-tabs', value=f'year-{max_year}', className='nav nav-pills', children=[
-                dcc.Tab(label=str(year), value=f'year-{year}', className='nav-item') for year in range(min_year, max_year + 1)
-            ]),
+            dbc.Tabs(
+                id='bar-chart-year-tabs',
+                active_tab=f'year-{max_year}',
+                class_name='d-flex justify-content-center w-100',
+                children=[
+                    dbc.Tab(label=str(year), tab_id=f'year-{year}') for year in range(min_year, max_year + 1)
+                ]
+            ),
             html.Div([
                 dcc.Graph(id='team-bar-chart'),
                 dcc.Dropdown(
@@ -85,9 +90,14 @@ app.layout = html.Div([
     html.Div([
         html.Div([
             html.H2('Offense Stats Distribution', className='text-center pb-3'),
-            dcc.Tabs(id='histogram-year-tabs', value=f'histogram-year-{max_year}', className='nav nav-pills', children=[
-                dcc.Tab(label=str(year), value=f'histogram-year-{year}', className='nav-item') for year in range(min_year, max_year + 1)
-            ]),
+            dbc.Tabs(
+                id='histogram-year-tabs',
+                active_tab=f'histogram-year-{max_year}',
+                class_name='d-flex justify-content-center w-100',
+                children=[
+                    dbc.Tab(label=str(year), tab_id=f'histogram-year-{year}') for year in range(min_year, max_year + 1)
+                ]
+            ),
             html.Div([
                 dcc.Graph(id='histogram-fantasy-points'),
                 dcc.Dropdown(
@@ -99,9 +109,14 @@ app.layout = html.Div([
         ], className='col-12 col-xl-6 p-3'),
         html.Div([
             html.H2('Offense Stats Correlation', className='text-center pb-3'),
-            dcc.Tabs(id='scatter-year-tabs', value=f'scatter-year-{max_year}', className='nav nav-pills', children=[
-                dcc.Tab(label=str(year), value=f'scatter-year-{year}', className='nav-item') for year in range(min_year, max_year + 1)
-            ]),
+            dbc.Tabs(
+                id='scatter-year-tabs',
+                active_tab=f'scatter-year-{max_year}',
+                class_name='d-flex justify-content-center w-100',
+                children=[
+                    dbc.Tab(label=str(year), tab_id=f'scatter-year-{year}') for year in range(min_year, max_year + 1)
+                ]
+            ),
             html.Div([
                 dcc.Graph(id='scatter-offensive-stats', className='w-100'),
                 html.Div([
@@ -120,7 +135,7 @@ app.layout = html.Div([
                             value='total_tds',
                             className='btn w-100'
                         ),
-                    ], className='col-12 col-xl-6 p-2'),
+                    ], className='col-12 col-xl-6 py-2 px-5'),
                 ], className='row w-100')
             ], className='p-3')
         ], className='col-12 col-xl-6 p-3'),
@@ -136,8 +151,6 @@ app.layout = html.Div([
     ])
 ])
 
-
-
 # Player stats by position line charts callback
 create_player_callback(app, 'RB', df_rb)
 create_player_callback(app, 'WR', df_wr)
@@ -147,7 +160,7 @@ create_player_callback(app, 'QB', df_qb)
 # Team stats bar charts callback
 @app.callback(
     Output('team-bar-chart', 'figure'),
-    [Input('team-stat-dropdown', 'value'), Input('bar-chart-year-tabs', 'value')]
+    [Input('team-stat-dropdown', 'value'), Input('bar-chart-year-tabs', 'active_tab')]
 )
 def update_team_bar_chart(selected_stat, selected_year):
     """
@@ -169,7 +182,7 @@ def update_team_bar_chart(selected_stat, selected_year):
 # Offense Stats Distribution Histogram callback
 @app.callback(
     Output('histogram-fantasy-points', 'figure'),
-    [Input('histogram-stat-dropdown', 'value'), Input('histogram-year-tabs', 'value')]
+    [Input('histogram-stat-dropdown', 'value'), Input('histogram-year-tabs', 'active_tab')]
 )
 def update_histogram(selected_stat, selected_year):
     """
@@ -194,7 +207,7 @@ def update_histogram(selected_stat, selected_year):
     Output('scatter-offensive-stats', 'figure'),
     [Input('scatter-x-stat-dropdown', 'value'),
      Input('scatter-y-stat-dropdown', 'value'),
-     Input('scatter-year-tabs', 'value')
+     Input('scatter-year-tabs', 'active_tab')
     ]
 )
 def update_scatter_plot(x_stat, y_stat, selected_year):
